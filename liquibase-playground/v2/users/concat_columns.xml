@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.2.xsd">
+    <changeSet id="create_name_column" author="madhead">
+        <addColumn tableName="USERS">
+            <column name="NAME" type="VARCHAR">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet id="populate_name_column" author="madhead">
+        <sql>UPDATE USERS SET NAME = FIRST_NAME || ' ' || LAST_NAME;</sql>
+        <rollback>
+            UPDATE USERS SET NAME = NULL;
+        </rollback>
+    </changeSet>
+    <changeSet id="drop_firstname_column" author="madhead">
+        <dropColumn tableName="USERS" columnName="FIRST_NAME"/>
+        <rollback>
+            <addColumn tableName="USERS">
+                <column name="FIRST_NAME" type="VARCHAR">
+                    <constraints nullable="false"/>
+                </column>
+            </addColumn>
+        </rollback>
+    </changeSet>
+    <changeSet id="drop_lastname_column" author="madhead">
+        <dropColumn tableName="USERS" columnName="LAST_NAME"/>
+        <rollback>
+            <addColumn tableName="USERS">
+                <column name="LAST_NAME" type="VARCHAR">
+                    <constraints nullable="false"/>
+                </column>
+            </addColumn>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>

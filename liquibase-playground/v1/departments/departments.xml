@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.2.xsd">
+    <changeSet id="create_departments_table" author="madhead">
+        <createTable tableName="DEPARTMENTS">
+            <column name="GUID" type="VARCHAR">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="NAME" type="VARCHAR"/>
+        </createTable>
+        <createIndex tableName="DEPARTMENTS" indexName="IDX_DEPARTMENTS">
+            <column name="NAME"/>
+        </createIndex>
+        <rollback>
+            <sql>DROP TABLE IF EXISTS DEPARTMENTS;</sql>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>
