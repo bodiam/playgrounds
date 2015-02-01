@@ -1,0 +1,44 @@
+# Use of references for DRY
+defaults:
+  http: &defaults_http
+    host: &defaults_http_host localhost
+    port: &defaults_http_port 8080
+  db: &defaults_db
+    host: &defaults_db_host shared-dev-db
+    port: &defaults_db_port 3306
+
+environments:
+  local:
+    http: *defaults_http # Refer the whole node
+    db:
+      host: localhost
+      port: *defaults_db_port # Refer only the scalar value
+  dev:
+    http:
+      host: dev.theawesome.com
+      port: *defaults_http_port
+    db:
+      host: *defaults_db_host
+      port: *defaults_db_port
+  qa:
+    http:
+      host: qa.theawesome.com
+      port: *defaults_http_port
+    db:
+      host: *defaults_db_host
+      port: *defaults_db_port
+  prod:
+    http:
+      host: theawesome.com
+      port: 80
+    db:
+      host: db.theawesome.com
+      port: 14880
+
+greetings:
+  oneline: >
+    I have come here to chew bubblegum and kick ass...
+    and I'm all out of bubblegum.
+  multiline: |
+    I have come here to chew bubblegum and kick ass...
+    and I'm all out of bubblegum.
