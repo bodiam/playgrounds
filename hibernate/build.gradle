@@ -1,0 +1,16 @@
+apply plugin: 'java'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.springframework:spring-context:4.1.4.RELEASE'
+    compile 'org.hibernate:hibernate-core:4.3.8.Final'
+
+    testCompile 'org.testng:testng:6.8.17'
+    testCompile 'org.springframework:spring-test:4.1.4.RELEASE'
+    testCompile 'org.springframework:spring-jdbc:4.1.4.RELEASE'
+    testCompile 'org.yaml:snakeyaml:1.14'
+    testCompile 'com.h2database:h2:1.4.185'
+}
