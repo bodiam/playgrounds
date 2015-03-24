@@ -1,0 +1,21 @@
+apply plugin: 'scala'
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	compile 'org.scala-lang:scala-library:2.11.6'
+
+	testCompile 'io.gatling.highcharts:gatling-charts-highcharts:2.1.4'
+}
+
+task gatling(type: JavaExec) {
+	dependsOn 'testClasses'
+	classpath sourceSets.test.runtimeClasspath + sourceSets.test.output
+	main 'io.gatling.app.Gatling'
+	environment GATLING_HOME: ''
+	systemProperties 'gatling.core.directory.binaries': sourceSets.test.output.classesDir
+	args '-rf', "$buildDir/gatling-reports",
+			'-s', 'LocalArtifactoryScenario'
+}
