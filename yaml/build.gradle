@@ -1,0 +1,18 @@
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	compile 'org.yaml:snakeyaml:1.15'
+
+	testCompile 'org.testng:testng:6.8.21'
+}
+
+test {
+	useTestNG()
+}

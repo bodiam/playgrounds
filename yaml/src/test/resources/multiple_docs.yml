@@ -1,0 +1,16 @@
+---
+storage:
+  dbPath: "/mnt/data/data/mongodb"
+  smallFiles: true
+
+net:
+  bindIp: 0.0.0.0
+  port: 27017
+---
+systemLog:
+  destination: file
+  path: "/mnt/data/data/mongodb/mongod.log"
+  logAppend: true
+---
+---
+---
