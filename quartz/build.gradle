@@ -1,0 +1,13 @@
+apply plugin: 'java'
+apply plugin: 'application'
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	compile 'org.quartz-scheduler:quartz:2.2.1'
+	compile 'org.apache.commons:commons-lang3:3.3.2'
+}
+
+mainClassName = 'by.dev.madhead.playgrounds.quartz.Main'
