@@ -1,0 +1,24 @@
+plugins {
+	id 'java'
+	id 'application'
+}
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+mainClassName = 'by.dev.madhead.playground.immutables.Main'
+
+repositories {
+	jcenter()
+}
+
+configurations {
+	annotationProcessor
+}
+
+dependencies {
+	annotationProcessor 'org.immutables:value:2.0.10'
+}
+
+sourceSets.all {
+	compileClasspath += [configurations.annotationProcessor]
+}
