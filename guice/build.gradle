@@ -1,0 +1,31 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:0.12.1230'
+    }
+}
+
+plugins {
+    id 'java'
+    id 'application'
+}
+
+apply plugin: 'kotlin'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.jetbrains.kotlin:kotlin-stdlib:0.12.1230'
+    compile 'org.jetbrains.kotlin:kotlin-reflect:0.12.1230'
+
+    compile 'com.google.inject:guice:4.0'
+}
+
+mainClassName = 'by.dev.madhead.playgrounds.guice.GuicePackage'
