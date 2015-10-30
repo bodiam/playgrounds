@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+liquibase --changeLogFile=changelog.xml \
+          --url="jdbc:oracle:thin:@${LIQUIBASE_PLAYGROUND_DB_HOST:-localhost}:${LIQUIBASE_PLAYGROUND_DB_PORT:-1521}/${LIQUIBASE_PLAYGROUND_DB_SID:-XE}" \
+          --username=${LIQUIBASE_PLAYGROUND_DB_USER:-LIQUIBASE_PLAYGROUND} \
+          --password=${LIQUIBASE_PLAYGROUND_DB_PASSWORD:-LIQUIBASE_PLAYGROUND} \
+          $@
