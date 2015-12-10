@@ -1,0 +1,4 @@
+pkg
+src/**
+!src/main.go
+*.pkg.tar.xz

@@ -1,0 +1,18 @@
+pkgname=madhead-makepkg-playground
+pkgver=0.0.1
+pkgrel=1
+pkgdesc='My first Arch package!'
+epoch=1
+url='https://github.com/madhead/playgrounds/tree/master/makepkg'
+license='APACHE'
+arch='x86_64'
+makedepends=('go')
+provides=($pkgname)
+
+build(){
+  go build -o $pkgname main.go
+}
+
+package(){
+  install -Dm755 $pkgname "$pkgdir/usr/bin/$pkgname"
+}
