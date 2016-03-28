@@ -1,0 +1,11 @@
+jar {
+	manifest {
+		name = 'Kotlin OSGi :: Dictionary service'
+		vendor = 'madhead'
+
+		instruction('Built-By', System.properties['user.name'])
+		instruction('Build-Jdk', System.properties['java.version'])
+
+		instruction('Bundle-Activator', 'by.dev.madhead.kosgi.dictionary.Activator')
+	}
+}

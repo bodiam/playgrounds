@@ -1,0 +1,15 @@
+dependencies {
+	compile project(':dictionary-service')
+}
+
+jar {
+	manifest {
+		name = 'Kotlin OSGi :: Alternative dictionary service'
+		vendor = 'madhead'
+
+		instruction('Built-By', System.properties['user.name'])
+		instruction('Build-Jdk', System.properties['java.version'])
+
+		instruction('Bundle-Activator', 'by.dev.madhead.kosgi.alternativedictionary.Activator')
+	}
+}

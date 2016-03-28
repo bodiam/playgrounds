@@ -1,0 +1,6 @@
+rootProject.name = 'kotlin-osgi'
+
+include 'service-listener'
+include 'dictionary-service'
+include 'alternative-dictionary-service'
+include 'dictionary-client'
