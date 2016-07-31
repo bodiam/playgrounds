@@ -1,0 +1,37 @@
+= Diagrams in AsciiDoc
+madhead <siarhei.krukau@gmail.com>
+2016-07
+:doctype: article
+:lang: en
+:toc:
+:toc-title: Contents
+:attribute-missing: warn
+:imagesdir: images
+
+See `buidl.gradle` to know how to configure `gemPath` for diagrams.
+
+include::actdiag.adoc[]
+
+include::blockdiag.adoc[]
+
+include::ditaa.adoc[]
+
+include::graphviz.adoc[]
+
+include::meme.adoc[]
+
+include::mermaid.adoc[]
+
+include::nwdiag.adoc[]
+
+include::packetdiag.adoc[]
+
+include::plantuml.adoc[]
+
+include::rackdiag.adoc[]
+
+include::seqdiag.adoc[]
+
+include::shaape.adoc[]
+
+include::wavedrom.adoc[]

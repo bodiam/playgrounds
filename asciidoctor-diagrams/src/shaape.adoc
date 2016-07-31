@@ -1,0 +1,15 @@
+== shaape
+
+In order to be able to use `shaape` diagrams you should install `shaape` tool with `pip2` (Python 2 only):
+
+    sudo pip2 install shaape
+
+Example diagram:
+
+[shaape]
+....
++-->
+/     /\
+>---+---->+  +
+     \/
+....

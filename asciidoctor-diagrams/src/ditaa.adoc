@@ -1,0 +1,18 @@
+== ditaa
+
+You should have Java installed in order to be able to use `ditaa` diagram.
+
+Example diagram:
+
+[ditaa]
+....
++--------+   +-------+    +-------+
+|        | --+ ditaa +--> |       |
+|  Text  |   +-------+    |diagram|
+|Document|   |!magic!|    |       |
+|     {d}|   |       |    |       |
++---+----+   +-------+    +-------+
+    :                         ^
+    |       Lots of work      |
+    +-------------------------+
+....

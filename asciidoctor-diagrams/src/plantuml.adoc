@@ -1,0 +1,15 @@
+== plantuml
+
+You should have Java installed in order to be able to use `ditaa` diagram.
+
+Example diagram:
+
+[plantuml]
+....
+@startuml
+
+(*) --> "First Activity"
+"First Activity" --> (*)
+
+@enduml
+....

@@ -1,0 +1,15 @@
+== blockdiag
+
+In order to be able to use `blockdiag` diagrams you should install `blockdiag` tool with `pip`:
+
+    sudo pip install blockdiag
+
+Example diagram:
+
+[blockdiag]
+....
+blockdiag {
+   A -> B -> C -> D;
+   A -> E -> F -> G;
+}
+....

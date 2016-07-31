@@ -1,0 +1,45 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'org.asciidoctor:asciidoctorj-pdf:1.5.0-alpha.11'
+    }
+}
+
+plugins {
+    id "org.asciidoctor.convert" version '1.5.3'
+    id 'com.github.jruby-gradle.base' version '1.2.1'
+}
+
+dependencies {
+    gems 'rubygems:asciidoctor-diagram:1.5.1'
+}
+
+// Delete default asciidoctor task, as we'll create custom ones
+tasks.remove(asciidoctor)
+
+asciidoctorj {
+    version = '1.5.4.1'
+}
+
+['html', 'pdf'].each { type ->
+    task "$type"(type: org.asciidoctor.gradle.AsciidoctorTask){
+        group = 'Article'
+        description = "Create ${type.toUpperCase()} version of the article"
+        dependsOn jrubyPrepare
+        gemPath = jrubyPrepare.outputDir
+
+        requires = ['asciidoctor-diagram']
+
+        backends = [type]
+
+        sourceDir = file('src')
+        sources {
+            include 'diagrams.adoc'
+        }
+
+        outputDir = buildDir
+    }
+}

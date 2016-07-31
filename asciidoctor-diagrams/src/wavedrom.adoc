@@ -1,0 +1,12 @@
+== wavedrom
+
+In order to be able to use `wavedrom` diagrams you should install `wavedrom` tool with `npm`:
+
+    npm install -g wavedrom phantomjs
+
+Example diagram:
+
+[wavedrom]
+....
+{ signal: [{ name: "Alfa", wave: "01.zx=ud.23.45" }] }
+....

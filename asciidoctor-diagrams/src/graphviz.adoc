@@ -1,0 +1,12 @@
+== graphviz
+
+In order to be able to use `graphviz` diagrams you should install `graphviz` tool:
+
+    sudo pacman -S graphviz
+
+Example diagram:
+
+[graphviz]
+....
+digraph G {Hello->World}
+....

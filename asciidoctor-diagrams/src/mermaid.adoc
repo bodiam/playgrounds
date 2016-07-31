@@ -1,0 +1,15 @@
+== mermaid
+
+In order to be able to use `mermaid` diagrams you should install `mermaid` tool with `npm`:
+
+    npm install -g mermaid phantomjs
+
+Example diagram:
+
+[mermaid]
+....
+%% Example of sequence diagram
+sequenceDiagram
+    Alice->>John: Hello John, how are you?
+    John-->>Alice: Great!
+....

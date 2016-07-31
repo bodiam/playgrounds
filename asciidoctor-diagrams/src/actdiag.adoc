@@ -1,0 +1,23 @@
+== actdiag
+
+In order to be able to use `actdiag` diagrams you should install `actdiag` tool with `pip`:
+
+    sudo pip install actdiag
+
+Example diagram:
+
+[actdiag]
+....
+actdiag {
+  write -> convert -> image
+
+  lane user {
+     label = "User"
+     write [label = "Writing reST"];
+     image [label = "Get diagram IMAGE"];
+  }
+  lane actdiag {
+     convert [label = "Convert reST to Image"];
+  }
+}
+....

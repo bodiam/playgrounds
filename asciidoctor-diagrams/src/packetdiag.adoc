@@ -1,0 +1,17 @@
+== packetdiag
+
+In order to be able to use `packetdiag` diagrams you should install `nwdiag` tool with `pip`:
+
+    sudo pip install nwdiag
+
+Example diagram:
+
+[packetdiag]
+....
+packetdiag {
+   0-7: Source Port
+   8-15: Destination Port
+   16-31: Sequence Number
+   32-47: Acknowledgment Number
+}
+....
