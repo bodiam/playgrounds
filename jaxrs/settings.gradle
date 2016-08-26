@@ -1,0 +1,5 @@
+rootProject.name = 'jaxrs'
+rootProject.buildFileName = 'build.gradle.kts'
+
+include ':helloworld'
+project(':helloworld').buildFileName = 'build.gradle.kts'
