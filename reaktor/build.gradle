@@ -1,0 +1,5 @@
+task wrapper(type: Wrapper) {
+	// 3.4+ is not supported by IntelliJ IDEA < 2016.3.6
+	gradleVersion = '3.3'
+	distributionType Wrapper.DistributionType.ALL
+}
