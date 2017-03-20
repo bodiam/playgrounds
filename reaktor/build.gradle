@@ -17,6 +17,7 @@ subprojects {
 
 	repositories {
 		jcenter()
+		maven { url "https://repo.spring.io/snapshot" }
 	}
 
 	dependencyManagement {
@@ -29,6 +30,8 @@ subprojects {
 		compile "org.jetbrains.kotlin:kotlin-stdlib:${kotlinVersion}"
 
 		compile "io.projectreactor:reactor-core"
+
+		compile "io.projectreactor:reactor-kotlin:${reactorKotlinVersion}"
 	}
 
 	kotlin {
