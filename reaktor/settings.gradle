@@ -1,3 +1,4 @@
 rootProject.name = 'reaktor'
 
 include 'intro'
+include 'errors'
