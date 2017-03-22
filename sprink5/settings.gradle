@@ -1,1 +1,3 @@
 rootProject.name = 'sprink5'
+
+include 'kotlin-spring'
