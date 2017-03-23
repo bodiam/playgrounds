@@ -1,0 +1,7 @@
+dependencies {
+	compile 'org.springframework.boot:spring-boot-starter-webflux'
+	compile 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
+	compile "io.projectreactor:reactor-kotlin:${reactorKotlinVersion}"
+
+	testCompile 'org.springframework.boot:spring-boot-starter-test'
+}

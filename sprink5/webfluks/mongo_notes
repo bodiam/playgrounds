@@ -1,0 +1,18 @@
+docker volume create --name sprink5-data
+docker run --detach --volume sprink5-data:/data/db --name sprink5 --publish 27017:27017 mongo:latest
+docker exec -it sprink5 mongo
+use marvel
+db.characters.insert({name:'Iron Man'})
+db.characters.insert({name:'Black Widow'})
+db.characters.insert({name:'Hulk'})
+db.characters.insert({name:'Thor'})
+db.characters.insert({name:'Star-Lord'})
+db.movies.insert({title:'Iron Man', characters: ['Iron Man', 'Nick Fury', 'J.A.R.V.I.S.']})
+db.movies.insert({title:'The Incredible Hulk', characters: ['Iron Man', 'Hulk']})
+db.movies.insert({title:'Iron Man II', characters: ['Iron Man', 'Black Widow', 'Nick Fury', 'J.A.R.V.I.S.']})
+db.movies.insert({title:'Thor', characters: ['Thor', 'Odin', 'Loki']})
+db.movies.insert({title:'Captain America: The First Avenger', characters: ['Captain America', 'Nick Fury']})
+db.movies.insert({title:'The Avengers', characters: ['Iron Man', 'Black Widow', 'Thor', 'Hulk', 'J.A.R.V.I.S.']})
+db.movies.insert({title:'Iron Man 3', characters: ['Iron Man', 'J.A.R.V.I.S.']})
+db.movies.insert({title:'Thor: The Dark World', characters: ['Thor', 'Odin', 'Loki']})
+db.movies.insert({title:'Guardians of the Galaxy', characters: ['Star-Lord']})
