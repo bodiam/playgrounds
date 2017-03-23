@@ -1,4 +1,4 @@
-package by.dev.madhead.playgrounds.sprink5.plugin
+package by.dev.madhead.playgrounds.sprink5.kontext
 
 import org.springframework.beans.factory.config.BeanDefinition
 import org.springframework.beans.factory.config.BeanDefinitionCustomizer

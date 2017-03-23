@@ -1,4 +1,4 @@
-package by.dev.madhead.playgrounds.sprink5.plugin
+package by.dev.madhead.playgrounds.sprink5.rest
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import org.springframework.boot.CommandLineRunner
