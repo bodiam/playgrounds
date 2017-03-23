@@ -1,0 +1,4 @@
+dependencies {
+	compile 'org.springframework.boot:spring-boot-starter-web'
+	compile "com.fasterxml.jackson.module:jackson-module-kotlin:${jacksonKotlinVersion}"
+}
