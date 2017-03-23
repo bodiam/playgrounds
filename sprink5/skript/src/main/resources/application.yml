@@ -1,0 +1,6 @@
+spring:
+  resources:
+    chain:
+      cache: true
+    cache-period: 1
+    static-locations: classpath:/templates/,classpath:/scripts/

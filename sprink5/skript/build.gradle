@@ -1,0 +1,16 @@
+dependencies {
+	compile 'org.springframework.boot:spring-boot-starter-web'
+
+	compile("org.jetbrains.kotlin:kotlin-compiler:${kotlinVersion}")
+	compile("org.jetbrains.kotlin:kotlin-script-util:${kotlinVersion}") {
+		exclude group: "com.jcabi", module: "jcabi-aether"
+		exclude group: "org.apache.maven", module: "maven-core"
+		exclude group: "org.sonatype.aether", module: "aether-api"
+	}
+
+	compile "org.jetbrains.kotlinx:kotlinx-html-jvm:${kotlinxHtmlVersion}"
+}
+
+bootRun {
+	addResources = true
+}
