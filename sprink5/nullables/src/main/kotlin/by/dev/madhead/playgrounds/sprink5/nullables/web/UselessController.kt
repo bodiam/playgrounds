@@ -15,7 +15,7 @@ class UselessController(
         @Qualifier("nullableService2") val nullableService2: UselessService?
 ) {
     @GetMapping(value = "dependencies", produces = arrayOf(MediaType.TEXT_PLAIN_VALUE))
-    fun getOptionalDependencies(): String = "nullableService1: ${nullableService1.doWork()},\nnullableService2: ${nullableService2?.doWork() ?: "null"}"
+    fun getOptionalDependencies(): String = "nullableService1: ${nullableService1.doWork()}\nnullableService2: ${nullableService2?.doWork() ?: "null"}"
 
     @GetMapping(value = "requiredParam", produces = arrayOf(MediaType.TEXT_PLAIN_VALUE))
     fun getRequiredParam(@RequestParam("name") name: String): String = "Hello, ${name}!"
