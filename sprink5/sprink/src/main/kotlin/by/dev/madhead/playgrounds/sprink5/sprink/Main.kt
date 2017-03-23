@@ -1,4 +1,4 @@
-package by.dev.madhead.playgrounds.sprink5.plugin
+package by.dev.madhead.playgrounds.sprink5.sprink
 
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.CommandLineRunner
