@@ -2,6 +2,6 @@ rootProject.name = 'sprink5'
 
 include 'sprink'
 include 'kontext'
-include 'rest-template'
+include 'krest'
 include 'nullables'
 include 'skript'
