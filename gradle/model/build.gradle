@@ -1,0 +1,36 @@
+// Applying plugins from https://plugins.gradle.org
+plugins {
+	id 'no.nils.wsdl2java' version '0.10'
+}
+
+// Defining custom tasks never was so easy!
+task fetchWeightUnitConvertorWSDL {
+	doLast {
+		// Bundlend Ant allows to execute low-level actions
+		ant.mkdir(
+				dir: "$buildDir/wsdl"
+		)
+		ant.get(
+				src: 'http://www.webservicex.net/ConvertWeight.asmx?WSDL',
+				dest: "$buildDir/wsdl/ConvertWeight.wsdl"
+		)
+	}
+}
+
+// Configuring wsdl2java plugin. Every plugin may provide it's own configuration block.
+wsdl2javaExt {
+	cxfVersion = '3.1.11'
+	deleteGeneratedSourcesOnClean = false
+}
+
+// Configuring wsdl2java task. This is different from plugin
+wsdl2java {
+	wsdlDir = file("$buildDir/wsdl")
+	wsdlsToGenerate = [
+			['-p', 'by.dev.madhead.playgrounds.gradle.model', "$buildDir/wsdl/ConvertWeight.wsdl"],
+	]
+	generatedWsdlDir = file("$buildDir/generated")
+}
+
+// Task dependencies
+wsdl2java.dependsOn fetchWeightUnitConvertorWSDL

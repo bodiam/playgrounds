@@ -1,3 +1,11 @@
+// You bulk-configure subprojects like this.
+subprojects {
+	repositories {
+		jcenter()
+	}
+}
+
+// Wrapper is a way to bundle specific Gradle version with the project, making it independent from the environment.
 task wrapper(type: Wrapper) {
 	gradleVersion = '3.5'
 	distributionType Wrapper.DistributionType.ALL

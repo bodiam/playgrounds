@@ -1,3 +1,4 @@
 rootProject.name = 'gradle'
 
 include 'wsdl'
+include 'model'
