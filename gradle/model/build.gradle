@@ -1,5 +1,6 @@
 // Applying plugins from https://plugins.gradle.org.
 plugins {
+	id 'java'
 	id 'no.nils.wsdl2java' version '0.10'
 }
 
