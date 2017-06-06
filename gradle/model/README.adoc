@@ -1,0 +1,4 @@
+= Model
+
+This module transpiles WSDLs into Java source code and then compiles it into Java classes.
+It contains an example of Gradle's https://github.com/nilsmagnus/wsdl2java[`wsdl2java`] plugin, one of the best available on Github.

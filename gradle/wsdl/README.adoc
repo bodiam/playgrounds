@@ -3,7 +3,7 @@
 Auxiliary module to manage, document and pack used SOAP services definitions.
 
 Note that this is a generic, language-agnostic project (another feature that Gradle offers).
-It is used only to demonstrate custom configurations / inter-project dependencies.
+It is used only to demonstrate https://docs.gradle.org/current/userguide/dependency_management.html#sub:configurations[custom configurations] / https://docs.gradle.org/3.3/userguide/multi_project_builds.html[inter-project dependencies].
 In a real world a ZIP (JAR) with WSDLs most probably will come from a Maven repository.
 
 == Services
