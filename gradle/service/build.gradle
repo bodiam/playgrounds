@@ -12,6 +12,8 @@ dependencyManagement {
 }
 
 dependencies {
+	compile project(':model')
+
 	compile "org.apache.camel:camel-spring:${camelVersion}"
 
 	compile 'org.springframework:spring-context'
