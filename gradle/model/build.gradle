@@ -1,36 +1,76 @@
-// Applying plugins from https://plugins.gradle.org
+// Applying plugins from https://plugins.gradle.org.
 plugins {
 	id 'no.nils.wsdl2java' version '0.10'
 }
 
-// Defining custom tasks never was so easy!
-task fetchWeightUnitConvertorWSDL {
+configurations {
+	wsdl // Custom configuration to hold WSDL dependencies.
+}
+
+// Project dependencies can be grouped in different configurations.
+// For example, 'compile' and 'test' are available after applying Java plugin, but user can create his own.
+dependencies {
+	// Depending on a specific project's configuration.
+	// Remember we put a ZIP there?
+	wsdl project(path: ':wsdl', configuration: 'serviceDefinitions')
+}
+
+// Another set of custom tasks.
+// These one use bundled Ant to make life simpler.
+task createWSDLDirectory {
 	doLast {
-		// Bundlend Ant allows to execute low-level actions
 		ant.mkdir(
 				dir: "$buildDir/wsdl"
-		)
-		ant.get(
-				src: 'http://www.webservicex.net/ConvertWeight.asmx?WSDL',
-				dest: "$buildDir/wsdl/ConvertWeight.wsdl"
 		)
 	}
 }
 
-// Configuring wsdl2java plugin. Every plugin may provide it's own configuration block.
+task fetchCookingUnitConvertorWSDL {
+	dependsOn createWSDLDirectory
+
+	doLast {
+		ant.get(
+				src: 'http://www.webservicex.net/ConvertCooking.asmx?WSDL',
+				dest: "$buildDir/wsdl/ConvertCooking.wsdl"
+		)
+	}
+}
+
+task unpackVolumeAndWeightUnitConvertorWSDLs(type: Copy) {
+	dependsOn createWSDLDirectory // Regular task dependency.
+	dependsOn configurations.wsdl // Task can also depend on a configuration, i.e. wait while it is fully resolved.
+
+	from {
+		configurations.wsdl.collect {
+			zipTree(it)
+		}
+	}
+
+	into file("$buildDir/wsdl")
+}
+
+// Meta-task for better composition.
+task prepareWSDL {
+	dependsOn fetchCookingUnitConvertorWSDL
+	dependsOn unpackVolumeAndWeightUnitConvertorWSDLs
+}
+
+// Configuring wsdl2java plugin.
+// Every plugin may provide it's own configuration block.
 wsdl2javaExt {
 	cxfVersion = '3.1.11'
 	deleteGeneratedSourcesOnClean = false
 }
 
-// Configuring wsdl2java task. This is different from plugin
+// Configuring wsdl2java task.
+// This is different from plugin configuration.
 wsdl2java {
+	dependsOn prepareWSDL
 	wsdlDir = file("$buildDir/wsdl")
 	wsdlsToGenerate = [
-			['-p', 'by.dev.madhead.playgrounds.gradle.model', "$buildDir/wsdl/ConvertWeight.wsdl"],
+			['-p', 'by.dev.madhead.playgrounds.gradle.model.weight', "$buildDir/wsdl/ConvertWeight.wsdl"],
+			['-p', 'by.dev.madhead.playgrounds.gradle.model.volume', "$buildDir/wsdl/ConvertVolume.wsdl"],
+			['-p', 'by.dev.madhead.playgrounds.gradle.model.cooking', "$buildDir/wsdl/ConvertCooking.wsdl"],
 	]
 	generatedWsdlDir = file("$buildDir/generated")
 }
-
-// Task dependencies
-wsdl2java.dependsOn fetchWeightUnitConvertorWSDL
