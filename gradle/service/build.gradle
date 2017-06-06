@@ -1,0 +1,18 @@
+// Applying plugins from https://plugins.gradle.org.
+plugins {
+	id 'java'
+	id 'io.spring.dependency-management' version '1.0.3.RELEASE' // Interpolation is not supported yet :(
+}
+
+// Maven BOMs supported thanks to Spring!
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework:spring-framework-bom:${springVersion}"
+	}
+}
+
+dependencies {
+	compile "org.apache.camel:camel-spring:${camelVersion}"
+
+	compile 'org.springframework:spring-context'
+}
