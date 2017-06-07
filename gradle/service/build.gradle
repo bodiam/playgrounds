@@ -1,6 +1,7 @@
 // Applying plugins from https://plugins.gradle.org.
 plugins {
 	id 'java'
+	id 'osgi'
 	id 'io.spring.dependency-management' version '1.0.3.RELEASE' // Interpolation is not supported yet :(
 }
 
@@ -17,4 +18,20 @@ dependencies {
 	compile "org.apache.camel:camel-spring:${camelVersion}"
 
 	compile 'org.springframework:spring-context'
+}
+
+jar {
+	// OSGi MANIFEST.MF configuration goes here.
+	// Configuration is similar to Maven BND plugin (http://felix.apache
+	// .org/documentation/subprojects/apache-felix-maven-bundle-plugin-bnd.html)
+	manifest {
+		name = 'Playgrounds :: Gradle :: Service'
+		symbolicName = 'by.dev.madhead.playgrounds.gradle.service'
+		vendor = 'madhead labs'
+
+		instruction('Export-Package', '') // My mother told me not to talk with strangers!
+		instruction('Import-Package',
+				'*' // Import all packages referred in the source code. Actually, it's a default value and can be dropped.
+		)
+	}
 }
