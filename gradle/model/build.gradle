@@ -1,6 +1,7 @@
 // Applying plugins from https://plugins.gradle.org.
 plugins {
 	id 'java'
+	id 'osgi'
 	id 'no.nils.wsdl2java' version '0.10'
 }
 
@@ -74,4 +75,19 @@ wsdl2java {
 			['-p', 'by.dev.madhead.playgrounds.gradle.model.cooking', "$buildDir/wsdl/ConvertCooking.wsdl"],
 	]
 	generatedWsdlDir = file("$buildDir/generated")
+}
+
+jar {
+	// OSGi MANIFEST.MF configuration goes here.
+	// Configuration is similar to Maven BND plugin (http://felix.apache
+	// .org/documentation/subprojects/apache-felix-maven-bundle-plugin-bnd.html)
+	manifest {
+		name = 'Playgrounds :: Gradle :: Model'
+		symbolicName = 'by.dev.madhead.playgrounds.gradle.model'
+		vendor = 'madhead labs'
+
+		instruction('Import-Package',
+				'*' // Import all packages referred in the source code. Actually, it's a default value and can be dropped.
+		)
+	}
 }
