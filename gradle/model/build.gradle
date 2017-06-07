@@ -43,7 +43,7 @@ task unpackVolumeAndWeightUnitConvertorWSDLs(type: Copy) {
 	dependsOn configurations.wsdl // Task can also depend on a configuration, i.e. wait while it is fully resolved.
 
 	from {
-		configurations.wsdl.collect {
+		configurations.wsdl.collect { // Regular Groovy magic
 			zipTree(it)
 		}
 	}

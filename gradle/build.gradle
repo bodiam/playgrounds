@@ -1,7 +1,32 @@
-// You bulk-configure subprojects like this.
-subprojects {
+// You can bulk-configure projects like this.
+allprojects {
 	repositories {
 		jcenter()
+	}
+}
+
+configurations {
+	deployable { // Custom configuration to hold dependencies for deployable ZIP.
+		transitive = false // We're not interested in dependencies' dependencies.
+	}
+}
+
+// Gather dependencies for the deployable ZIP.
+// Compare this to using maven-assembly-plugin?
+dependencies {
+	deployable project(path: ':model')
+	deployable project(path: ':service')
+	deployable 'com.google.guava:guava:22.0' // Just to demonstrate 'third-party' dependency
+}
+
+task deployableZIP(type: Zip) {
+	dependsOn configurations.deployable // Task can also depend on a configuration, i.e. wait while it is fully resolved.
+
+	baseName = 'gradle-deploy'
+	destinationDir = buildDir
+
+	configurations.deployable.collect { // Regular Groovy magic
+		from it
 	}
 }
 
