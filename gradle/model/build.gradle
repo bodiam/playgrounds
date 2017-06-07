@@ -70,9 +70,19 @@ wsdl2java {
 	dependsOn prepareWSDL
 	wsdlDir = file("$buildDir/wsdl")
 	wsdlsToGenerate = [
-			['-p', 'by.dev.madhead.playgrounds.gradle.model.weight', "$buildDir/wsdl/ConvertWeight.wsdl"],
-			['-p', 'by.dev.madhead.playgrounds.gradle.model.volume', "$buildDir/wsdl/ConvertVolume.wsdl"],
-			['-p', 'by.dev.madhead.playgrounds.gradle.model.cooking', "$buildDir/wsdl/ConvertCooking.wsdl"],
+			[
+					'-p', 'by.dev.madhead.playgrounds.gradle.model.weight',
+					'-wsdlLocation', '',
+					"$buildDir/wsdl/ConvertWeight.wsdl"],
+			[
+					'-p', 'by.dev.madhead.playgrounds.gradle.model.volume',
+					'-wsdlLocation', '',
+					"$buildDir/wsdl/ConvertVolume.wsdl"],
+			[
+					'-p', 'by.dev.madhead.playgrounds.gradle.model.cooking',
+					'-wsdlLocation', '',
+					"$buildDir/wsdl/ConvertCooking.wsdl"
+			],
 	]
 	generatedWsdlDir = file("$buildDir/generated")
 }

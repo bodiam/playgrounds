@@ -15,9 +15,11 @@ dependencyManagement {
 dependencies {
 	compile project(':model')
 
-	compile "org.apache.camel:camel-spring:${camelVersion}"
-
 	compile 'org.springframework:spring-context'
+	compile "org.apache.cxf:cxf-rt-frontend-jaxrs:${cxfVersion}"
+	compile "org.apache.cxf:cxf-rt-frontend-jaxws:${cxfVersion}"
+	compile "com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:${jacksonVersion}"
+	compile "io.swagger:swagger-annotations:${swaggerVersion}"
 }
 
 jar {
@@ -31,6 +33,11 @@ jar {
 
 		instruction('Export-Package', '') // My mother told me not to talk with strangers!
 		instruction('Import-Package',
+				'com.fasterxml.jackson.jaxrs.json',
+				'com.fasterxml.jackson.databind',
+				'org.apache.cxf.feature',
+				'org.apache.cxf.jaxws',
+
 				'*' // Import all packages referred in the source code. Actually, it's a default value and can be dropped.
 		)
 	}
