@@ -20,6 +20,9 @@ dependencies {
 	compile "org.apache.cxf:cxf-rt-frontend-jaxws:${cxfVersion}"
 	compile "com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:${jacksonVersion}"
 	compile "io.swagger:swagger-annotations:${swaggerVersion}"
+
+	testCompile "org.testng:testng:${testngVersion}"
+	testCompile "org.mockito:mockito-core:${mockitoVersion}"
 }
 
 jar {
@@ -41,4 +44,8 @@ jar {
 				'*' // Import all packages referred in the source code. Actually, it's a default value and can be dropped.
 		)
 	}
+}
+
+test {
+	useTestNG() // Enabling TestNG support. Unit testing is not that different from Maven.
 }
