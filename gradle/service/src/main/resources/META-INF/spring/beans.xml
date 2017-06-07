@@ -1,18 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+       xmlns:jaxws="http://cxf.apache.org/jaxws"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
                            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
-                           http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+						   http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd
+						   http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
+	<context:annotation-config/>
 
-	<context:component-scan base-package="by.dev.madhead.playgrounds.gradle.service.processor"/>
+	<jaxws:client id="convertCookingSoapClient"
+	              serviceClass="by.dev.madhead.playgrounds.gradle.model.cooking.CookingUnitSoap"
+	              address="http://www.webservicex.net/ConvertCooking.asmx"/>
+	<jaxws:client id="convertVolumesSoapClient"
+	              serviceClass="by.dev.madhead.playgrounds.gradle.model.volume.VolumeUnitSoap"
+	              address="http://www.webservicex.net/convertVolume.asmx"/>
+	<jaxws:client id="convertWeightsSoapClient"
+	              serviceClass="by.dev.madhead.playgrounds.gradle.model.weight.ConvertWeightsSoap"
+	              address="http://www.webservicex.net/ConvertWeight.asmx"/>
 
-	<camelContext xmlns="http://camel.apache.org/schema/spring">
-		<route>
-			<from uri="timer://myTimer?fixedRate=true&amp;period=2000"/>
-			<process ref="weightProcessor"/>
-		</route>
-	</camelContext>
-
+	<jaxrs:server
+			id="sinkhole"
+			address="http://0.0.0.0:8080/">
+		<jaxrs:providers>
+			<bean class="com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider">
+				<property name="mapper">
+					<bean id="objectMapper" class="com.fasterxml.jackson.databind.ObjectMapper">
+						<property name="serializationInclusion" value="NON_NULL"/>
+					</bean>
+				</property>
+			</bean>
+		</jaxrs:providers>
+		<jaxrs:features>
+			<bean class="org.apache.cxf.feature.LoggingFeature"/>
+		</jaxrs:features>
+		<jaxrs:serviceBeans>
+			<bean class="by.dev.madhead.playgrounds.gradle.service.cooking.CookingUnitConversionService"/>
+			<bean class="by.dev.madhead.playgrounds.gradle.service.volume.VolumeUnitConversionService"/>
+			<bean class="by.dev.madhead.playgrounds.gradle.service.weight.WeightUnitConversionService"/>
+		</jaxrs:serviceBeans>
+	</jaxrs:server>
 </beans>
