@@ -2,6 +2,7 @@
 plugins {
 	id 'java'
 	id 'osgi'
+	id 'jacoco'
 	id 'io.spring.dependency-management' version '1.0.3.RELEASE' // Interpolation is not supported yet :(
 }
 
@@ -66,6 +67,15 @@ jar {
 	}
 }
 
+// Configuring jacocoTestReport task
+jacocoTestReport {
+	reports {
+		html.enabled true
+		xml.enabled true
+		csv.enabled true
+	}
+}
+
 test {
 	useTestNG() // Enabling TestNG support. Unit testing is not that different from Maven.
 }
@@ -75,6 +85,10 @@ task functionalTest(type: Test) {
 
 	testClassesDir = sourceSets.functionalTest.output.classesDir
 	classpath = sourceSets.functionalTest.runtimeClasspath
+
+	jacoco {
+		enabled = false // We don't want to track coverage during functional tests
+	}
 }
 
 // Integrating integration tests in the build process.
