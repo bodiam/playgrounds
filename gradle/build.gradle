@@ -22,10 +22,30 @@ allprojects {
 }
 
 // WSDL project is not published because it does not produce any artifacts
-configure(subprojects - project(':wsdl')) { subproject ->
+configure(allprojects - project(':wsdl')) { project ->
 	apply plugin: 'maven-publish'
 	apply plugin: 'com.jfrog.bintray'
 
+	bintray {
+		user = System.getenv('BINTRAY_USER')
+		key = System.getenv('BINTRAY_KEY')
+		publications = ['main']
+		publish = true
+		dryRun = project.version.endsWith('SNAPSHOT') // Bintray does not allow snapshots and re-uploads
+
+		pkg {
+			repo = 'gradle-demo-releases'
+			name = project.hasProperty('artifactId') ? project.artifactId : 'gradle-deploy'
+			websiteUrl = 'https://github.com/madhead/playgrounds'
+			issueTrackerUrl = 'https://github.com/madhead/playgrounds/issues'
+			vcsUrl = 'https://github.com/madhead/playgrounds.git'
+
+			licenses = ['WTFPL']
+		}
+	}
+}
+
+configure(subprojects - project(':wsdl')) { subproject ->
 	publishing {
 		publications {
 			// There may be one or more publications of different types in Gradle.
@@ -39,33 +59,14 @@ configure(subprojects - project(':wsdl')) { subproject ->
 			}
 		}
 		// This will work with any Maven repository, maybe requiring some authentication.
-		// I dont have any *public* repositories to work with, so instead of that we'll deploy into Bintray.
+		// I don't have any *public* repositories to work with, so instead of that we'll deploy into Bintray.
 		// The principle is the same.
 		//		repositories {
 		//			maven {
 		//			    // Choose repos like a Pro!
-		//				url "http://artifactory.url/artifactory/gradle-demo-${project.version.endsWith('SNAPSHOT') ? 'snapshots' :
-		// 'releases'}"
+		//				url "http://artifactory.url/gradle-demo-${project.version.endsWith('SNAPSHOT') ? 'snapshots' : 'releases'}"
 		//			}
 		//		}
-	}
-
-	bintray {
-		user = System.getenv('BINTRAY_USER')
-		key = System.getenv('BINTRAY_KEY')
-		publications = ['main']
-		publish = true
-		dryRun = project.version.endsWith('SNAPSHOT') // Bintray does not allow snapshots and re-uploads
-
-		pkg {
-			repo = 'gradle-demo-releases'
-			name = "$subproject.artifactId"
-			websiteUrl = 'https://github.com/madhead/playgrounds'
-			issueTrackerUrl = 'https://github.com/madhead/playgrounds/issues'
-			vcsUrl = 'https://github.com/madhead/playgrounds.git'
-
-			licenses = ['WTFPL']
-		}
 	}
 
 	// Configuring javadoc and sources tasks
@@ -118,34 +119,10 @@ task deployableZIP(type: Zip) {
 
 publishing {
 	publications {
-		deployable(MavenPublication) {
+		main(MavenPublication) {
 			artifact source: deployableZIP, extension: 'zip'
 		}
 	}
-}
-
-bintray {
-	user = System.getenv('BINTRAY_USER')
-	key = System.getenv('BINTRAY_KEY')
-	publications = ['deployable']
-	publish = true
-	dryRun = project.version.endsWith('SNAPSHOT') // Bintray does not allow snapshots and re-uploads
-
-	pkg {
-		repo = 'gradle-demo-releases'
-		name = 'gradle-deploy'
-		websiteUrl = 'https://github.com/madhead/playgrounds'
-		issueTrackerUrl = 'https://github.com/madhead/playgrounds/issues'
-		vcsUrl = 'https://github.com/madhead/playgrounds.git'
-
-		licenses = ['WTFPL']
-	}
-}
-
-// Wrapper is a way to bundle specific Gradle version with the project, making it independent from the environment.
-task wrapper(type: Wrapper) {
-	gradleVersion = '3.5'
-	distributionType Wrapper.DistributionType.ALL
 }
 
 release {
@@ -167,6 +144,12 @@ release {
 	}
 }
 
+//sonarqube {
+//	properties {
+//		property 'sonar.projectName', 'Gradle'
+//	}
+//}
+
 
 task releaseBuild {
 	dependsOn(
@@ -174,8 +157,8 @@ task releaseBuild {
 	)
 }
 
-//sonarqube {
-//	properties {
-//		property 'sonar.projectName', 'Gradle'
-//	}
-//}
+// Wrapper is a way to bundle specific Gradle version with the project, making it independent from the environment.
+task wrapper(type: Wrapper) {
+	gradleVersion = '3.5'
+	distributionType Wrapper.DistributionType.ALL
+}
