@@ -7,6 +7,10 @@ buildscript {
 	}
 }
 
+plugins {
+	id 'net.researchgate.release' version '2.6.0'
+}
+
 // You can bulk-configure projects like this.
 allprojects {
 	repositories {
@@ -64,6 +68,8 @@ configure(subprojects - project(':wsdl')) { subproject ->
 	// Configuring javadoc and sources tasks
 	// afterEvaluate is used because Gradle will execute parent's project code before applying plugins to child projects.
 	subproject.afterEvaluate {
+		subproject.tasks['build'].mustRunAfter('clean')
+
 		tasks.withType(Javadoc) {
 			options.links(
 					'http://docs.oracle.com/javase/8/docs/api',
@@ -112,3 +118,35 @@ task wrapper(type: Wrapper) {
 	gradleVersion = '3.5'
 	distributionType Wrapper.DistributionType.ALL
 }
+
+release {
+	// Disable checks for demo purposes.
+	failOnCommitNeeded = false
+	failOnPublishNeeded = false
+	failOnSnapshotDependencies = false
+	failOnUnversionedFiles = false
+	failOnUpdateNeeded = false
+	revertOnFail = true
+	preCommitText = ''
+	buildTasks = ['releaseBuild']
+	git {
+		requireBranch = '' // From any branch for demo purposes.
+		pushToRemote = 'origin'
+		pushToBranchPrefix = ''
+		commitVersionFileOnly = false
+		signTag = false
+	}
+}
+
+
+task releaseBuild {
+	dependsOn(
+			':service:check'
+//			'sps-reporting-bundle:build',
+//			'sps-reporting-bundle:publish',
+//			'sps-reporting-test-utils:clean',
+//			'sps-reporting-test-utils:build',
+//			'sps-reporting-test-utils:publish'
+	)
+}
+
