@@ -8,7 +8,9 @@ buildscript {
 }
 
 plugins {
+	id 'maven-publish'
 	id 'net.researchgate.release' version '2.6.0'
+	id 'com.jfrog.bintray' version '1.7.3'
 	//	id 'org.sonarqube' version '2.5' // I don't have a public Sonar for demo.
 }
 
@@ -111,6 +113,32 @@ task deployableZIP(type: Zip) {
 
 	configurations.deployable.collect { // Regular Groovy magic
 		from it
+	}
+}
+
+publishing {
+	publications {
+		deployable(MavenPublication) {
+			artifact source: deployableZIP, extension: 'zip'
+		}
+	}
+}
+
+bintray {
+	user = System.getenv('BINTRAY_USER')
+	key = System.getenv('BINTRAY_KEY')
+	publications = ['deployable']
+	publish = true
+	dryRun = project.version.endsWith('SNAPSHOT') // Bintray does not allow snapshots and re-uploads
+
+	pkg {
+		repo = 'gradle-demo-releases'
+		name = 'gradle-deploy'
+		websiteUrl = 'https://github.com/madhead/playgrounds'
+		issueTrackerUrl = 'https://github.com/madhead/playgrounds/issues'
+		vcsUrl = 'https://github.com/madhead/playgrounds.git'
+
+		licenses = ['WTFPL']
 	}
 }
 
