@@ -12,6 +12,22 @@ dependencyManagement {
 	}
 }
 
+sourceSets {
+	// Configuring separate source set for functional tests. No more inclusions / exclusions for different types of tests.
+	functionalTest {
+		java.srcDir file('src/functional-test/java')
+		resources.srcDir file('src/functional-test/resources')
+	}
+}
+
+configurations {
+	// Extending functional test classpathes from test. Not very ideomatic, but quick.
+	// In a real-world scenario functional tests may not "see" application classes or share dependencies with unit test
+	// Functional tests can even use different testing framework, like Spock.
+	functionalTestCompile.extendsFrom testCompile
+	functionalTestRuntime.extendsFrom testRuntime
+}
+
 dependencies {
 	compile project(':model')
 
@@ -23,6 +39,10 @@ dependencies {
 
 	testCompile "org.testng:testng:${testngVersion}"
 	testCompile "org.mockito:mockito-core:${mockitoVersion}"
+
+	// Example of functional test-specific dependency
+	functionalTestCompile "org.apache.httpcomponents:httpclient:4.5.3"
+	// functionalTestCompile "org.testng:testng:${testngVersion}" when not extending test classpath, dependencies must be repeated.
 }
 
 jar {
@@ -49,3 +69,14 @@ jar {
 test {
 	useTestNG() // Enabling TestNG support. Unit testing is not that different from Maven.
 }
+
+task functionalTest(type: Test) {
+	useTestNG() // Ok, maybe not the best choice for functional tests...
+
+	testClassesDir = sourceSets.functionalTest.output.classesDir
+	classpath = sourceSets.functionalTest.runtimeClasspath
+}
+
+// Integrating integration tests in the build process.
+//check.dependsOn functionalTest // We may not want to run functional tests as a part of main task tree
+functionalTest.mustRunAfter test // Force ordering. Obviously, unit tests must run before functional tests
