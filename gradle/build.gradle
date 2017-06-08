@@ -1,7 +1,84 @@
+buildscript {
+	repositories {
+		jcenter()
+	}
+	dependencies {
+		classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
+	}
+}
+
 // You can bulk-configure projects like this.
 allprojects {
 	repositories {
 		jcenter()
+	}
+}
+
+// WSDL project is not published because it does not produce any artifacts
+configure(subprojects - project(':wsdl')) { subproject ->
+	apply plugin: 'maven-publish'
+	apply plugin: 'com.jfrog.bintray'
+
+	publishing {
+		publications {
+			// There may be one or more publications of different types in Gradle.
+			// Here we configure 'main' publication of type 'MavenPublication'.
+			main(MavenPublication) {
+				// It will include 'main' JAR file + sources + javadocs
+				from components.java
+
+				artifact sourcesJar
+				artifact javadocJar
+			}
+		}
+		// This will work with any Maven repository, maybe requiring some authentication.
+		// I dont have any *public* repositories to work with, so instead of that we'll deploy into Bintray.
+		// The principle is the same.
+		//		repositories {
+		//			maven {
+		//			    // Choose repos like a Pro!
+		//				url "http://artifactory.url/artifactory/gradle-demo-${project.version.endsWith('SNAPSHOT') ? 'snapshots' :
+		// 'releases'}"
+		//			}
+		//		}
+	}
+
+	bintray {
+		user = System.getenv('BINTRAY_USER')
+		key = System.getenv('BINTRAY_KEY')
+		publications = ['main']
+		publish = true
+		dryRun = project.version.endsWith('SNAPSHOT') // Bintray does not allow snapshots and re-uploads
+
+		pkg {
+			repo = 'gradle-demo-releases'
+			name = "$subproject.artifactId"
+			websiteUrl = 'https://github.com/madhead/playgrounds'
+			issueTrackerUrl = 'https://github.com/madhead/playgrounds/issues'
+			vcsUrl = 'https://github.com/madhead/playgrounds.git'
+
+			licenses = ['WTFPL']
+		}
+	}
+
+	// Configuring javadoc and sources tasks
+	// afterEvaluate is used because Gradle will execute parent's project code before applying plugins to child projects.
+	subproject.afterEvaluate {
+		tasks.withType(Javadoc) {
+			options.links(
+					'http://docs.oracle.com/javase/8/docs/api',
+			)
+		}
+
+		task javadocJar(type: Jar, dependsOn: javadoc) {
+			classifier = 'javadoc'
+			from 'build/docs/javadoc'
+		}
+
+		task sourcesJar(type: Jar) {
+			classifier = 'sources'
+			from subproject.sourceSets.main.allSource
+		}
 	}
 }
 
