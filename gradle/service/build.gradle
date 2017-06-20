@@ -83,7 +83,7 @@ test {
 task functionalTest(type: Test) {
 	useTestNG() // Ok, maybe not the best choice for functional tests...
 
-	testClassesDir = sourceSets.functionalTest.output.classesDir
+	testClassesDirs = sourceSets.functionalTest.output.classesDirs
 	classpath = sourceSets.functionalTest.runtimeClasspath
 
 	jacoco {
