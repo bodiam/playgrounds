@@ -6,6 +6,8 @@ plugins {
 	id 'io.spring.dependency-management' version '1.0.3.RELEASE' // Interpolation is not supported yet :(
 }
 
+apply plugin: 'com.benjaminsproule.swagger'
+
 // Maven BOMs supported thanks to Spring!
 dependencyManagement {
 	imports {
@@ -94,3 +96,21 @@ task functionalTest(type: Test) {
 // Integrating integration tests in the build process.
 //check.dependsOn functionalTest // We may not want to run functional tests as a part of main task tree
 functionalTest.mustRunAfter test // Force ordering. Obviously, unit tests must run before functional tests
+
+// Swagger configuration is the same as in Maven.
+// Actually, Gradle's swagger plugin is a wrapper on Maven's swagger plugin and uses the same classes.
+swagger {
+	apiSource {
+		springmvc = false
+		locations = ['by.dev.madhead.playgrounds.gradle.service']
+		schemes = ['http', 'https']
+		host = 'example.com:8080'
+		basePath = '/api'
+		info {
+			title = 'Swagger Gradle Plugin Sample'
+			version = 'v1'
+			description = 'This is a sample.'
+		}
+		swaggerDirectory = "$buildDir/swagger"
+	}
+}
