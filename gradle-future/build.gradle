@@ -1,0 +1,165 @@
+buildscript {
+	repositories {
+		jcenter()
+	}
+	dependencies {
+		classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
+		classpath 'com.benjaminsproule:swagger-gradle-plugin:0.1.0'
+	}
+}
+
+plugins {
+	id 'maven-publish'
+	id 'net.researchgate.release' version '2.6.0'
+	id 'com.jfrog.bintray' version '1.7.3'
+	//	id 'org.sonarqube' version '2.5' // I don't have a public Sonar for demo.
+}
+
+// You can bulk-configure projects like this.
+allprojects {
+	repositories {
+		jcenter()
+	}
+}
+
+// WSDL project is not published because it does not produce any artifacts
+configure(allprojects - project(':wsdl')) { project ->
+	apply plugin: 'maven-publish'
+	apply plugin: 'com.jfrog.bintray'
+
+	bintray {
+		user = System.getenv('BINTRAY_USER')
+		key = System.getenv('BINTRAY_KEY')
+		publications = ['main']
+		publish = true
+		dryRun = project.version.endsWith('SNAPSHOT') // Bintray does not allow snapshots and re-uploads
+
+		pkg {
+			repo = 'gradle-demo-releases'
+			name = project.hasProperty('artifactId') ? project.artifactId : 'gradle-deploy'
+			websiteUrl = 'https://github.com/madhead/playgrounds'
+			issueTrackerUrl = 'https://github.com/madhead/playgrounds/issues'
+			vcsUrl = 'https://github.com/madhead/playgrounds.git'
+
+			licenses = ['WTFPL']
+		}
+	}
+}
+
+configure(subprojects - project(':wsdl')) { subproject ->
+	publishing {
+		publications {
+			// There may be one or more publications of different types in Gradle.
+			// Here we configure 'main' publication of type 'MavenPublication'.
+			main(MavenPublication) {
+				// It will include 'main' JAR file + sources + javadocs
+				from components.java
+
+				artifact sourcesJar
+				artifact javadocJar
+			}
+		}
+		// This will work with any Maven repository, maybe requiring some authentication.
+		// I don't have any *public* repositories to work with, so instead of that we'll deploy into Bintray.
+		// The principle is the same.
+		//		repositories {
+		//			maven {
+		//			    // Choose repos like a Pro!
+		//				url "http://artifactory.url/gradle-demo-${project.version.endsWith('SNAPSHOT') ? 'snapshots' : 'releases'}"
+		//			}
+		//		}
+	}
+
+	// Configuring javadoc and sources tasks
+	// afterEvaluate is used because Gradle will execute parent's project code before applying plugins to child projects.
+	subproject.afterEvaluate {
+		subproject.tasks['build'].mustRunAfter('clean')
+
+		tasks.withType(Javadoc) {
+			options.links(
+					'http://docs.oracle.com/javase/8/docs/api',
+			)
+		}
+
+		task javadocJar(type: Jar, dependsOn: javadoc) {
+			classifier = 'javadoc'
+			from 'build/docs/javadoc'
+		}
+
+		task sourcesJar(type: Jar) {
+			classifier = 'sources'
+			from subproject.sourceSets.main.allSource
+		}
+	}
+}
+
+configurations {
+	deployable { // Custom configuration to hold dependencies for deployable ZIP.
+		transitive = false // We're not interested in dependencies' dependencies.
+	}
+}
+
+// Gather dependencies for the deployable ZIP.
+// Compare this to using maven-assembly-plugin?
+dependencies {
+	deployable project(path: ':model')
+	deployable project(path: ':service')
+	deployable 'com.google.guava:guava:22.0' // Just to demonstrate 'third-party' dependency
+}
+
+task deployableZIP(type: Zip) {
+	dependsOn configurations.deployable // Task can also depend on a configuration, i.e. wait while it is fully resolved.
+
+	baseName = 'gradle-deploy'
+	destinationDir = buildDir
+
+	configurations.deployable.collect { // Regular Groovy magic
+		from it
+	}
+}
+
+publishing {
+	publications {
+		main(MavenPublication) {
+			artifact source: deployableZIP, extension: 'zip'
+		}
+	}
+}
+
+release {
+	// Disable checks for demo purposes.
+	failOnCommitNeeded = false
+	failOnPublishNeeded = false
+	failOnSnapshotDependencies = false
+	failOnUnversionedFiles = false
+	failOnUpdateNeeded = false
+	revertOnFail = true
+	preCommitText = ''
+	buildTasks = ['releaseBuild']
+	git {
+		requireBranch = '' // From any branch for demo purposes.
+		pushToRemote = 'origin'
+		pushToBranchPrefix = ''
+		commitVersionFileOnly = false
+		signTag = false
+	}
+}
+
+//sonarqube {
+//	properties {
+//		property 'sonar.projectName', 'Gradle'
+//	}
+//}
+
+
+task releaseBuild {
+	dependsOn(
+			':service:check'
+	)
+}
+
+// Wrapper is a way to bundle specific Gradle version with the project, making it independent from the environment.
+task wrapper(type: Wrapper) {
+	gradleVersion = '4.0'
+	distributionType Wrapper.DistributionType.ALL
+}
